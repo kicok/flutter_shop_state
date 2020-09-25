@@ -67,4 +67,10 @@ class Cart with ChangeNotifier {
     _items.remove(productId);
     notifyListeners();
   }
+
+  // 주문완료후 카트 삭제
+  void clear() {
+    _items = {};
+    notifyListeners();
+  }
 }
