@@ -68,6 +68,26 @@ class Cart with ChangeNotifier {
     notifyListeners();
   }
 
+  void removeSingleItem(String productId) {
+    if (!_items.containsKey(productId)) {
+      return;
+    }
+
+    if (_items[productId].quantity > 1) {
+      _items.update(
+          productId,
+          (exitingCartItem) => CartItem(
+                id: exitingCartItem.id,
+                title: exitingCartItem.title,
+                quantity: exitingCartItem.quantity - 1,
+                price: exitingCartItem.price,
+              ));
+    } else {
+      _items.remove(productId);
+    }
+    notifyListeners();
+  }
+
   // 주문완료후 카트 삭제
   void clear() {
     _items = {};
