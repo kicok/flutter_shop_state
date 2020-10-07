@@ -7,7 +7,7 @@ import '../widgets/app_drawer.dart';
 import '../providers/products.dart';
 
 class UserProductsScreen extends StatelessWidget {
-  static const routhName = '/user-products';
+  static const routeName = '/user-products';
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +19,7 @@ class UserProductsScreen extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.add),
             onPressed: () {
-              Navigator.of(context).pushNamed(EditProductScreen.routhName);
+              Navigator.of(context).pushNamed(EditProductScreen.routeName);
             },
           ),
         ],

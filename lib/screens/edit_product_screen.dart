@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../providers/product.dart';
 
 class EditProductScreen extends StatefulWidget {
-  static const routhName = '/edit-product';
+  static const routeName = '/edit-product';
   @override
   _EditProductScreenState createState() => _EditProductScreenState();
 }
