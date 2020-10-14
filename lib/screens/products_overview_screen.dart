@@ -5,6 +5,7 @@ import '../widgets/app_drawer.dart';
 import '../widgets/product_grid.dart';
 import '../widgets/badge.dart';
 import '../providers/cart.dart';
+import '../providers/products.dart';
 import './cart_screen.dart';
 
 enum FilterOptions {
@@ -19,6 +20,29 @@ class ProductOverviewScreen extends StatefulWidget {
 
 class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
   var _showOnlyFavorites = false;
+  var _isInit = true;
+
+  @override
+  void initState() {
+    //Provider.of<Products>(context, listen: false).fetchAndSetProducts(); // Work!
+    //Provider.of<Products>(context).fetchAndSetProducts(); // Won't Work!
+
+    // Future.delayed(Duration.zero).then((_) { // Future 를 zero초 지연시켜 context 를  이 구문에서 사용할수 있음. 예제에서는 didChangeDependencies 사용권장.
+    //   Provider.of<Products>(context).fetchAndSetProducts();
+    // });
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      Provider.of<Products>(context).fetchAndSetProducts();
+    }
+
+    _isInit = false;
+
+    super.didChangeDependencies();
+  }
 
   @override
   Widget build(BuildContext context) {
