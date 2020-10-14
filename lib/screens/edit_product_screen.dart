@@ -92,7 +92,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
     }
   }
 
-  void _saveForm() {
+  Future<void> _saveForm() async {
     final isValid = _form.currentState.validate();
     if (!isValid) {
       return;
@@ -117,10 +117,13 @@ class _EditProductScreenState extends State<EditProductScreen> {
       });
       Navigator.of(context).pop();
     } else {
-      Provider.of<Products>(context, listen: false)
-          .addProduct(_editedProduct)
-          .catchError((error) {
-        return showDialog<Null>(
+      try {
+        await Provider.of<Products>(context, listen: false)
+            .addProduct(_editedProduct);
+      } catch (error) {
+        //await showDialog<Null>( // Future.then 방식에서는 showDialog<Null>  상태에서만 AlertDialog 를 닫은후 로딩바가 사라지고 목록으로 이동할수 있었다.
+        await showDialog(
+          // 하지만  async await 방식에서는 <Null> 이 있든 없든 상관없이 모두 작동.
           context: context,
           builder: (ctx) => AlertDialog(
             title: Text('An error occurred!'),
@@ -135,14 +138,13 @@ class _EditProductScreenState extends State<EditProductScreen> {
             ],
           ),
         );
-      }).then((_) {
+      } finally {
         setState(() {
           _isLoading = false;
         });
         Navigator.of(context).pop();
-      });
+      }
     }
-    //Navigator.of(context).pop();
   }
 
   @override
