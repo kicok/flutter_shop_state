@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
+import '../models/http_exception.dart';
 import 'product.dart';
 
 class Products with ChangeNotifier {
@@ -141,25 +142,24 @@ class Products with ChangeNotifier {
     }
   }
 
-  void deleteProduct(String id) {
+  Future<void> deleteProduct(String id) async {
     // 메모리에서 delete할 product를 참조 변수 저장
     final existingProductIndex = _items.indexWhere((prod) => prod.id == id);
     var existingProduct = _items[existingProductIndex];
 
     // 실제 서버에서 삭제 ( 실패시 product 참조변수를 이용하여 롤백)
-    final url = 'https://flutter-update-95a71.firebaseio.com/products/$id';
-    http.delete(url).then((response) {
-      if (response.statusCode >= 400) {
-        //
-      }
-      existingProduct = null;
-    }).catchError((_) {
-      _items.insert(existingProductIndex, existingProduct);
-      notifyListeners();
-    });
+    final url = 'https://flutter-update-95a71.firebaseio.com/products/$id.json';
+    final response = await http.delete(url);
 
     //메모리 목록에서 삭제
     _items.removeAt(existingProductIndex);
     notifyListeners();
+
+    if (response.statusCode >= 400) {
+      _items.insert(existingProductIndex, existingProduct);
+      notifyListeners();
+      throw HttpException('Could not delete product.');
+    }
+    existingProduct = null;
   }
 }
