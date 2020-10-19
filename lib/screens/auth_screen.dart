@@ -164,6 +164,7 @@ class _AuthCardState extends State<AuthCard> {
       _showErrorDialog(errorMessage);
     } catch (error) {
       const errorMessage = 'Colud not authenticate you. Please try again later';
+      _showErrorDialog(errorMessage);
     }
 
     setState(() {
