@@ -44,6 +44,10 @@ class Products with ChangeNotifier {
 
   //var _showFavoritesOnly = false;
 
+  final String authToken;
+
+  Products(this.authToken, this._items);
+
   List<Product> get items {
     // if (_showFavoritesOnly) {
     //   return _items.where((prodItem) => prodItem.isFavorite).toList();
@@ -70,7 +74,8 @@ class Products with ChangeNotifier {
   // }
 
   Future<void> fetchAndSetProducts() async {
-    const url = 'https://flutter-update-95a71.firebaseio.com/products.json';
+    final url =
+        'https://flutter-update-95a71.firebaseio.com/products.json?auth=$authToken';
     try {
       final response = await http.get(url);
       final List<Product> loadedProducts = [];
@@ -93,7 +98,8 @@ class Products with ChangeNotifier {
   }
 
   Future<void> addProduct(Product product) async {
-    const url = 'https://flutter-update-95a71.firebaseio.com/products.json';
+    final url =
+        'https://flutter-update-95a71.firebaseio.com/products.json?auth=$authToken';
     try {
       final response = await http.post(
         url,
@@ -126,7 +132,7 @@ class Products with ChangeNotifier {
     final prodIndex = _items.indexWhere((prod) => prod.id == id);
     if (prodIndex >= 0) {
       final url =
-          'https://flutter-update-95a71.firebaseio.com/products/$id.json';
+          'https://flutter-update-95a71.firebaseio.com/products/$id.json?auth=$authToken';
       await http.patch(url,
           body: json.encode({
             'title': newProduct.title,
@@ -147,7 +153,8 @@ class Products with ChangeNotifier {
     var existingProduct = _items[existingProductIndex];
 
     // 실제 서버에서 삭제 ( 실패시 product 참조변수를 이용하여 롤백)
-    final url = 'https://flutter-update-95a71.firebaseio.com/products/$id.json';
+    final url =
+        'https://flutter-update-95a71.firebaseio.com/products/$id.json?auth=$authToken';
     final response = await http.delete(url);
 
     //메모리 목록에서 삭제
