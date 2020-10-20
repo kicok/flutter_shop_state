@@ -76,7 +76,7 @@ class Products with ChangeNotifier {
 
   Future<void> fetchAndSetProducts() async {
     final url =
-        'https://flutter-update-95a71.firebaseio.com/products.json?auth=$authToken';
+        'https://flutter-update-95a71.firebaseio.com/products.json?auth=$authToken&orderBy="creatorId"&equalTo="$userId"';
     try {
       final response = await http.get(url);
       final List<Product> loadedProducts = [];
@@ -120,6 +120,7 @@ class Products with ChangeNotifier {
           'description': product.description,
           'imageUrl': product.imageUrl,
           'price': product.price,
+          'creatorId': userId,
         }),
       );
 
