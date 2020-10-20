@@ -47,6 +47,8 @@ class AppDrawer extends StatelessWidget {
             title: Text('Logout'),
             onTap: () {
               Navigator.of(context).pop();
+              Navigator.of(context).pushReplacementNamed(
+                  '/'); //로그아웃 할때 main 로직을태움 : 자동로그인 로직을 실행시켜 문제 없음을 확인 해 예기치 못한 상황을 대비..
               // Navigator.of(context)
               //     .pushReplacementNamed(UserProductsScreen.routeName);
               Provider.of<Auth>(context, listen: false).logout();
